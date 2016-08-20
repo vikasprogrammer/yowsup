@@ -1,6 +1,6 @@
 import sys
 
-
+from yowsup.stacks import  YowStackBuilder
 from yowsup.stacks import YowStack, YOWSUP_CORE_LAYERS, YOWSUP_PROTOCOL_LAYERS_FULL
 from yowsup.layers import YowLayerEvent
 from yowsup.layers.auth import YowAuthenticationProtocolLayer, AuthError
@@ -21,21 +21,22 @@ from .layer import SendMediaLayer
 class SendMediaStack(object):
 
     def __init__(self, credentials, messages, encryptionEnabled = True):
-        layers = (SendMediaLayer,) + (YOWSUP_PROTOCOL_LAYERS_FULL,) + YOWSUP_CORE_LAYERS
+        # layers = (SendMediaLayer,) + (YOWSUP_PROTOCOL_LAYERS_FULL,) + YOWSUP_CORE_LAYERS
 
         stackBuilder = YowStackBuilder()
 
         self.stack = stackBuilder\
             .pushDefaultLayers(encryptionEnabled)\
-            .push(SendLayer)\
+            .push(SendMediaLayer)\
             .build()
-            
+
         self.stack.setProp(SendMediaLayer.PROP_MESSAGES, messages)
         self.stack.setProp(YowAuthenticationProtocolLayer.PROP_PASSIVE, True)
         self.stack.setProp(YowAuthenticationProtocolLayer.PROP_CREDENTIALS, credentials)
         self.stack.setProp(YowNetworkLayer.PROP_ENDPOINT, YowConstants.ENDPOINTS[0])
         self.stack.setProp(YowCoderLayer.PROP_DOMAIN, YowConstants.DOMAIN)
         self.stack.setProp(YowCoderLayer.PROP_RESOURCE, YowsupEnv.getCurrent().getResource())
+        self.stack.setProp(PROP_IDENTITY_AUTOTRUST, True)
 
     def start(self):
         self.stack.broadcastEvent(YowLayerEvent(YowNetworkLayer.EVENT_STATE_CONNECT))
