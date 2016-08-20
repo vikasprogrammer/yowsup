@@ -36,7 +36,6 @@ class SendMediaStack(object):
         self.stack.setProp(YowNetworkLayer.PROP_ENDPOINT, YowConstants.ENDPOINTS[0])
         self.stack.setProp(YowCoderLayer.PROP_DOMAIN, YowConstants.DOMAIN)
         self.stack.setProp(YowCoderLayer.PROP_RESOURCE, YowsupEnv.getCurrent().getResource())
-        self.stack.setProp(PROP_IDENTITY_AUTOTRUST, True)
 
     def start(self):
         self.stack.broadcastEvent(YowLayerEvent(YowNetworkLayer.EVENT_STATE_CONNECT))
