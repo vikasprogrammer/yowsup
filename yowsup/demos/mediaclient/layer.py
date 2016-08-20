@@ -38,14 +38,14 @@ class SendMediaLayer(YowInterfaceLayer):
             logger.info('Message sent')
             self.disconnect()
 
-    def onRequestUploadResult(self, jid, filePath, resultRequestUploadIqProtocolEntity, requestUploadIqProtocolEntity):
+    def onRequestUploadResult(self, jid, filePath, resultRequestUploadIqProtocolEntity, requestUploadIqProtocolEntity, caption):
         if resultRequestUploadIqProtocolEntity.isDuplicate():
             if self.MEDIA_TYPE == "image":
                 self.doSendImage(filePath, resultRequestUploadIqProtocolEntity.getUrl(),
-                                 jid, resultRequestUploadIqProtocolEntity.getIp())
+                                 jid, resultRequestUploadIqProtocolEntity.getIp(), caption)
             elif self.MEDIA_TYPE == "video":
                 self.doSendVideo(filePath, resultRequestUploadIqProtocolEntity.getUrl(),
-                                 jid, resultRequestUploadIqProtocolEntity.getIp())
+                                 jid, resultRequestUploadIqProtocolEntity.getIp(), caption)
             elif self.MEDIA_TYPE == "audio":
                 self.doSendAudio(filePath, resultRequestUploadIqProtocolEntity.getUrl(),
                                  jid, resultRequestUploadIqProtocolEntity.getIp())
@@ -77,13 +77,13 @@ class SendMediaLayer(YowInterfaceLayer):
         sys.stdout.write("%s => %s, %d%% \r" % (os.path.basename(filePath), jid, progress))
         sys.stdout.flush()
 
-    def doSendImage(self, filePath, url, to, ip=None):
-        entity = ImageDownloadableMediaMessageProtocolEntity.fromFilePath(filePath, url, ip, to)
+    def doSendImage(self, filePath, url, to, ip=None, caption=None):
+        entity = ImageDownloadableMediaMessageProtocolEntity.fromFilePath(filePath, url, ip, to, caption = caption)
         self.toLower(entity)
 
     def doSendVideo(self, filePath, url, to, ip=None):
         #  fpath, url, mediaType, ip, to, mimeType = None, preview = None, filehash = None, filesize = None
-        entity = DownloadableMediaMessageProtocolEntity.fromFilePath(filePath, url, "video", ip, to)
+        entity = DownloadableMediaMessageProtocolEntity.fromFilePath(filePath, url, "video", ip, to, caption = caption)
         self.toLower(entity)
 
     def doSendAudio(self, filePath, url, to, ip=None):
