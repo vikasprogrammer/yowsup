@@ -8,7 +8,7 @@ DEFAULT = "s40"
 
 class YowsupEnvType(abc.ABCMeta):
     def __init__(cls, name, bases, dct):
-        if name != "YowsupEnv":
+        if name != "YowsupEnv" and name != "NewBase":
             YowsupEnv.registerEnv(cls)
         super(YowsupEnvType, cls).__init__(name, bases, dct)
 

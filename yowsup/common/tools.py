@@ -8,6 +8,7 @@ import logging
 import tempfile
 import base64
 import hashlib
+import magic
 import os.path, mimetypes
 from .optionalmodules import PILOptionalModule, FFVideoOptionalModule
 
@@ -182,3 +183,62 @@ class VideoTools:
             preview = ImageTools.generatePreviewFromImage(path)
             os.remove(path)
             return preview
+
+
+class MediaDiscover(object):
+
+    MIME_TYPE_IMAGE = [
+        "image/gif", "image/jpeg", "image/pjpeg",
+        "image/png", "image/svg+xml", "image/tiff",
+    ]
+    MIME_TYPE_VIDEO = [
+        "video/avi", "video/mpeg", "video/mp4",
+        "video/ogg", "video/quicktime", "video/webm",
+        "video/x-matroska", "video/x-ms-wmv", "video/x-flv"
+    ]
+    MIME_TYPE_AUDIO = [
+        "audio/webm", "audio/vorbis",
+        "audio/ogg", "audio/mpeg",
+        "audio/mp4", "audio/aac", "audio/wav"
+    ]
+
+    EXT_TYPE_IMAGE = ['png', 'jpg']
+    EXT_TYPE_VIDEO = ['mp4']
+    EXT_TYPE_AUDIO = ['aac', 'mp3', 'ogg', 'oga', 'wav', 'wma']
+
+    @classmethod
+    def fromMimeType(cls, path):
+        mimeType = magic.from_file(path, mime=True)
+
+        if mimeType in MediaDiscover.MIME_TYPE_IMAGE:
+            return "image"
+        elif mimeType in MediaDiscover.MIME_TYPE_VIDEO:
+            return "video"
+        elif mimeType in MediaDiscover.MIME_TYPE_AUDIO:
+            return "audio"
+
+        return None
+
+    @classmethod
+    def fromExtension(cls, path):
+        for ext in MediaDiscover.EXT_TYPE_IMAGE:
+            if path.endswith(ext):
+                return "image"
+        for ext in MediaDiscover.EXT_TYPE_VIDEO:
+            if path.endswith(ext):
+                return "video"
+
+        for ext in MediaDiscover.EXT_TYPE_AUDIO:
+            if path.endswith(ext):
+                return "audio"
+
+        return None
+
+    @staticmethod
+    def getMediaType(path):
+        mediaType = MediaDiscover.fromMimeType(path)
+
+        if mediaType is not None:
+            return mediaType
+
+        return MediaDiscover.fromExtension(path)
