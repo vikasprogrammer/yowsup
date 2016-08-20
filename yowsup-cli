@@ -258,7 +258,7 @@ class DemosArgParser(YowArgParser):
         sendOpts = self.add_argument_group("Send media demo")
         sendOpts.add_argument('-x', '--media', action="store", help="Send a media message to specified phone number, "
                                                                      "wait for server receipt and exit (jpg, mp3, mp4).",
-                              metavar=("phone", "path"), nargs = 2)
+                              metavar=("phone", "path", "caption"), nargs = 3)
         syncContacts = self.add_argument_group("Sync contacts")
         syncContacts.add_argument('-S','--sync', action = "store" , help = "Sync ( check valid ) whatsapp contacts",metavar =("contacts"))
 
@@ -341,7 +341,8 @@ class DemosArgParser(YowArgParser):
 
         try:
             self.printInfoText()
-            stack = mediaclient.SendMediaStack(credentials, [(self.args["media"][0], self.args["media"][1])])
+            stack = mediaclient.SendMediaStack(credentials, [(self.args["media"][0], self.args["media"][1], self.args["media"][2])],
+                                               not self.args["unmoxie"])
 
             stack.start()
         except KeyboardInterrupt:

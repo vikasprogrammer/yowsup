@@ -20,10 +20,16 @@ from .layer import SendMediaLayer
 
 class SendMediaStack(object):
 
-    def __init__(self, credentials, messages):
+    def __init__(self, credentials, messages, encryptionEnabled = True):
         layers = (SendMediaLayer,) + (YOWSUP_PROTOCOL_LAYERS_FULL,) + YOWSUP_CORE_LAYERS
 
-        self.stack = YowStack(layers)
+        stackBuilder = YowStackBuilder()
+
+        self.stack = stackBuilder\
+            .pushDefaultLayers(encryptionEnabled)\
+            .push(SendLayer)\
+            .build()
+            
         self.stack.setProp(SendMediaLayer.PROP_MESSAGES, messages)
         self.stack.setProp(YowAuthenticationProtocolLayer.PROP_PASSIVE, True)
         self.stack.setProp(YowAuthenticationProtocolLayer.PROP_CREDENTIALS, credentials)

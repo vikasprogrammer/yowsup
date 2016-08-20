@@ -93,7 +93,7 @@ class SendMediaLayer(YowInterfaceLayer):
 
     def main(self):
         for target in self.getProp(self.__class__.PROP_MESSAGES, []):
-            jid, path = target
+            jid, path, caption = target
             jid = '%s@s.whatsapp.net' % jid
             self.MEDIA_TYPE = MediaDiscover.getMediaType(path)
 
@@ -112,7 +112,7 @@ class SendMediaLayer(YowInterfaceLayer):
                 entity = RequestUploadIqProtocolEntity(RequestUploadIqProtocolEntity.MEDIA_TYPE_AUDIO, filePath=path)
 
             successFn = lambda successEntity, originalEntity: self.onRequestUploadResult(jid, path,
-                                                                                         successEntity, originalEntity)
+                                                                                         successEntity, originalEntity, caption)
 
             errorFn = lambda errorEntity, originalEntity: self.onRequestUploadError(jid, path,
                                                                                     errorEntity, originalEntity)
