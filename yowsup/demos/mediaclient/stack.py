@@ -28,7 +28,7 @@ class SendMediaStack(object):
         self.stack.setProp(YowAuthenticationProtocolLayer.PROP_CREDENTIALS, credentials)
         self.stack.setProp(YowNetworkLayer.PROP_ENDPOINT, YowConstants.ENDPOINTS[0])
         self.stack.setProp(YowCoderLayer.PROP_DOMAIN, YowConstants.DOMAIN)
-        self.stack.setProp(YowCoderLayer.PROP_RESOURCE, YowsupEnv.getCurrent())
+        self.stack.setProp(YowCoderLayer.PROP_RESOURCE, YowsupEnv.getCurrent().getResource())
 
     def start(self):
         self.stack.broadcastEvent(YowLayerEvent(YowNetworkLayer.EVENT_STATE_CONNECT))
