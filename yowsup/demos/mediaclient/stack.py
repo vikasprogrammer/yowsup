@@ -12,6 +12,7 @@ from yowsup.layers.network import YowNetworkLayer
 # from yowsup.layers.protocol_acks import YowAckProtocolLayer
 # from yowsup.layers.logger import YowLoggerLayer
 from yowsup.common import YowConstants
+from yowsup.env import YowsupEnv
 from yowsup import env
 
 from .layer import SendMediaLayer
